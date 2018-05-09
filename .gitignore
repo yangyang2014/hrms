@@ -1,0 +1,6 @@
+
+*.class
+target/classes/com/hrms/bean/Department.class
+target/classes/com/hrms/bean/Department.class
+target/classes/dbconfig.properties
+target/classes/mapper/DepartmentMapper.xml

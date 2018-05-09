@@ -3,11 +3,12 @@ package com.hrms.bean;
 import java.util.List;
 
 public class Department {
-    private Integer id;
-    private String name;
-    private String remark;
-    private List<Employee> employees;
-    private Integer empNum;
+    private Integer id;//部门ID
+    private String name;//部门名称
+    private String number;//部门编号
+    private String remark;//部门描述
+    private List<Employee> employees;//部门的员工列表
+    private Integer empNum;//部门中的员工数
     public Department() {
 		super();
 	}
