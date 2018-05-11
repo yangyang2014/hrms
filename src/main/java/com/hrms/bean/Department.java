@@ -44,7 +44,15 @@ public class Department {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getRemark() {
+    public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public String getRemark() {
         return remark;
     }
 
