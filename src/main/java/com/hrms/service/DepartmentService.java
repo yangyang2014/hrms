@@ -1,6 +1,7 @@
 package com.hrms.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,27 +13,27 @@ import com.hrms.dao.DepartmentMapper;
 public class DepartmentService {
 	@Autowired
 	DepartmentMapper departmentMapper;
-	
-	public List<Department> getAll(){
+
+	public List<Department> getAll() {
 		List<Department> departments = departmentMapper.selectByExample(null);
-		for(Department department:departments) {
+		for (Department department : departments) {
 			department.setEmpNum(department.getEmployees().size());
 			department.setEmployees(null);
 		}
-		return departments;	
+		return departments;
 	}
 
-	public List<Department> getAllWithEmployee(){
+	public List<Department> getAllWithEmployee() {
 		List<Department> departments = departmentMapper.selectByExample(null);
-		for(Department department:departments) {
+		for (Department department : departments) {
 			department.setEmpNum(department.getEmployees().size());
 		}
-		return departments;	
+		return departments;
 	}
 
-	public int saveDeptmentByExample(Department department) {
+	public int insertDeptmentByExample(Department department) {
 		return departmentMapper.insert(department);
-		
+
 	}
 
 	public Department getDept(Integer id) {
@@ -45,5 +46,13 @@ public class DepartmentService {
 
 	public int deleteDeptmentById(Integer id) {
 		return departmentMapper.deleteByPrimaryKey(id);
+	}
+
+	public List<Department> getDeptByName(String deptName) {
+		return departmentMapper.getDeptByName(deptName);
+	}
+
+	public boolean validateDeptment(String deptName) {
+		return !getDeptByName(deptName).isEmpty();// 存在就返回true,否则false
 	}
 }
