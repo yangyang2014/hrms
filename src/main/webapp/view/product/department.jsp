@@ -36,8 +36,8 @@
 							<div class="col-lg-12">
 								<label class=" control-label" for="deptName">部门名</label> <input
 									type="text" class="form-inline" id="deptName" name="name"
-									placeholder="运营部">	<span id="validateReminder" class="alert alert-warning"
-								role="alert"></span>
+									placeholder="运营部"> <span id="validateReminder"
+									class="alert alert-warning" role="alert"></span>
 							</div>
 						</div>
 						<div class="form-group">
@@ -47,7 +47,7 @@
 									name="remark" placeholder="运营部负责。。。"></textarea>
 							</div>
 						</div>
-					
+
 					</form>
 				</div>
 				<div class="modal-footer">
@@ -103,15 +103,15 @@
 			<div class="col-md-12">
 				<h2>部门管理</h2>
 				<ol class="breadcrumb">
-					<li><a href="#">Home</a></li>
+					<li><a href="${APP_PATH}/home.jsp">Home</a></li>
 					<li class="active">部门管理</li>
 					<li></li>
 				</ol>
 			</div>
 		</div>
 		<div class="row">
-		<button id="dept_add_modal_btn"
-			class="btn btn-primary col-md-offset-8">新增</button>
+			<button id="dept_add_modal_btn"
+				class="btn btn-primary col-md-offset-8">新增</button>
 		</div>
 		<div class="row">
 			<div class="col-md-10">
@@ -130,37 +130,10 @@
 					<tbody></tbody>
 				</table>
 			</div>
-			<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-			<div id="main" style="width: 400px; height: 250px;"></div>
+
 		</div>
 	</div>
 	<script type="text/javascript">
-		// 基于准备好的dom，初始化echarts实例
-		var myChart = echarts.init(document.getElementById('main'));
-
-		// 指定图表的配置项和数据
-		var option = {
-			title : {
-				text : '各部门人数情况'
-			},
-			tooltip : {},
-			legend : {
-				data : [ '人数' ]
-			},
-			xAxis : {
-				data : []
-			},
-			yAxis : {},
-			series : [ {
-				name : '人数',
-				type : 'bar',
-				data : []
-			} ]
-		};
-
-		// 使用刚指定的配置项和数据显示图表。
-		myChart.setOption(option);
-		/**********************页面显示相关js代码***********************/
 		$(function() {
 			getDeptPage();
 		});
@@ -172,38 +145,14 @@
 				success : function(result) {
 					console.log(result);
 					buildDeptView(result);
-					buildGraph(result);
 				}
 			});
 		}
-
-		function buildGraph(result) {
-			var depts = [];
-			var empNums = [];
-			var departments = result.extend.departments;
-			$.each(departments, function(index, item) {
-				depts.push(item.name);
-				empNums.push(item.empNum);
-			});
-			// 填入数据
-			myChart.setOption({
-				xAxis : {
-					data : depts
-				},
-				series : [ {
-					// 根据名字对应到相应的系列
-					name : '员工数',
-					data : empNums
-				} ]
-			});
-
-		}
-
 		function buildDeptView(result) {
 			$("tbody").empty();
 			var departments = result.extend.departments;
 			console.log(departments);
-			var num =0;
+			var num = 0;
 			$.each(departments, function(index, item) {
 				var totalTd = $("<td></td>").append(++num);
 				var nameTd = $("<td></td>").append(item.name);
@@ -239,9 +188,9 @@
 				});
 				var operationTd = $("<td></td>").append(editBtn).append(" ")
 						.append(deleteBtn);
-				var deptItemTr = $("<tr></tr>").append(totalTd).append(deptNoTd)
-						.append(nameTd).append(empNumTd).append(remarkTd)
-						.append(operationTd);
+				var deptItemTr = $("<tr></tr>").append(totalTd)
+						.append(deptNoTd).append(nameTd).append(empNumTd)
+						.append(remarkTd).append(operationTd);
 				deptItemTr.appendTo($("tbody"));
 			});
 		}
