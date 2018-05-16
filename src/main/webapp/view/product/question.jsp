@@ -16,23 +16,34 @@
 <title>面试题</title>
 </head>
 <body>
-	<h1>招聘笔试题</h1>
-	<p>本系统支持随机生成面试题，到你指定的目录。点击“随机选取5道笔试题”即可。</p>
-	<p>
-		<div id="endtime"></div>
-		<button id="getQuestionBtn">随机选取5道笔试题</button>
-		<div id="endtime"></div>
-		<div id="status"><br/><br/><br/></div>
-	</p>
+	<div class="container">
+		<div class="row">
+			<h1>招聘笔试题</h1>
+			<ol class="breadcrumb">
+				<li><a href="${APP_PATH}/home.jsp">Home</a></li>
+				<li class="active">题库管理</li>
+			</ol>
+		</div>
+		<div class="row">
+			<p>本系统支持随机生成面试题，到你指定的目录。点击“随机选取5道笔试题”即可。</p>
+			<p>
+			<div id="endtime"></div>
+			<button id="getQuestionBtn">随机选取5道笔试题</button>
+			<div id="endtime"></div>
+			<div id="status">
+				<br /> <br /> <br />
+			</div>
+		</div>
+	</div>
 	<script>
 		var i = 1;
-		
+
 		$("#getQuestionBtn").click(function() {
-			i=1;
+			i = 1;
 			$("#status").empty();
 			deal();
 		});
-		
+
 		function deal() {
 			if (i == 6) {
 				$("#status").empty();
@@ -43,9 +54,9 @@
 			setTimeout(deal, 2000);
 		}
 		/*获取生成随机题目的状态*/
-		function getProgress(status){
+		function getProgress(status) {
 			$.ajax({
-				url : "${APP_PATH}/getProgress/"+status,
+				url : "${APP_PATH}/getProgress/" + status,
 				type : "GET",
 				success : function(result) {
 					console.log(result);
@@ -54,11 +65,11 @@
 			});
 		}
 		/*将状态展现到web页面*/
-		function buildResult(progressStatus){
+		function buildResult(progressStatus) {
 			$("#status").append($("<p></p>").append(progressStatus));
 		}
 		/*获取试题并展示*/
-		function getAndBuildQuestion(){
+		function getAndBuildQuestion() {
 			$.ajax({
 				url : "${APP_PATH}/getQuestion",
 				type : "GET",
@@ -68,16 +79,15 @@
 					var num = 1;
 					var resultTitleP = $("<h3></h3>").append("随机抽取的五道题目如下：");
 					$("#status").append(resultTitleP);
-					$.each(questions,function(index,question){
-						var questionP = $("<h4></h4>").append("第"+(num++)+"题、"+question.content);
+					$.each(questions, function(index, question) {
+						var questionP = $("<h4></h4>").append(
+								"第" + (num++) + "题、" + question.content);
 						$("#status").append(questionP);
 					});
-					
-					
+
 				}
 			});
 		}
-		
 	</script>
 </body>
 </html>
