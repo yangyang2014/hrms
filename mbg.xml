@@ -12,7 +12,7 @@
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
         connectionURL="jdbc:mysql://localhost:3306/hrm_db"
         userId="root"
-        password="">
+        password="123456">
     </jdbcConnection>
 
     <javaTypeResolver >
@@ -36,8 +36,8 @@
       <property name="enableSubPackages" value="true" />
     </javaClientGenerator>
 
-    <table tableName="question_for_interview" domainObjectName="Question" ></table>
- 	<table tableName="recruit_task" domainObjectName="Recruitment" ></table>
+  
+ 	<table tableName="job" domainObjectName="Job" ></table>
  	
 
   </context>
