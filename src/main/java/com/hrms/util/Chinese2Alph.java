@@ -8,11 +8,8 @@ public class Chinese2Alph {
 			49062, 49324, 49896, 50371, 50614, 50622, 50906, 51387, 51446, 52218, 52218, 52218, 52698, 52980, 53689,
 			54481, 55289 };
 
-	public Chinese2Alph() {
-	}
-
 	/**主函数, 输入字符, 得到他的声母, 英文字母返回对应的大写字母 其他非简体汉字返回 '*' */
-	public char Char2Alpha(char ch) {
+	private static char Char2Alpha(char ch) {
 		if (ch >= 'a' && ch <= 'z')
 			return (char) (ch - 'a' + 'A');
 		if (ch >= 'A' && ch <= 'Z')
@@ -34,7 +31,7 @@ public class Chinese2Alph {
 	/**
 	 * 根据一个包含汉字的字符串返回一个汉字拼音首字母的字符串
 	 */
-	public String String2Alpha(String str) {
+	public static String String2Alpha(String str) {
 		String Result = "";
 		try {
 			for (int i = 0; i < str.length(); i++) {
@@ -46,7 +43,7 @@ public class Chinese2Alph {
 		return Result;
 	}
 
-	private boolean match(int i, int gb) {
+	private static boolean match(int i, int gb) {
 		if (gb < table[i])
 			return false;
 		int j = i + 1;

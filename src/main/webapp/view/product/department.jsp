@@ -120,10 +120,10 @@
 						<tr>
 							<th class="col-md-1">#</th>
 							<th class="col-md-2">编号</th>
-							<th class="col-md-2">部门</th>
+							<th class="col-md-1">部门</th>
 							<th class="col-md-1">人数</th>
-							<th class="col-md-4 ">描述</th>
-							<th class="col-md-6">操作</th>
+							<th class="col-md-3">描述</th>
+							<th class="col-md-3">操作</th>
 
 						</tr>
 					</thead>
@@ -148,6 +148,7 @@
 				}
 			});
 		}
+		/* 构建部门表 */
 		function buildDeptView(result) {
 			$("tbody").empty();
 			var departments = result.extend.departments;
@@ -159,19 +160,17 @@
 				var deptNoTd = $("<td></td>").append(item.number);
 				var empNumTd = $("<td></td>").append(item.empNum);
 				var remarkTd = $("<td></td>").append(item.remark);
+				var showDetailBtn = $("<button></button>").addClass("btn btn-success btn-sm").append("查看");
 				var editBtn = $("<button></button>").addClass(
-						"btn btn-primary btn-sm").append(
-						$("<span></span>").addClass(
-								"glyphicon glyphicon-pencil").append("编辑"));
+						"btn btn-primary btn-sm").append("编辑");
+				
+				var deleteBtn = $("<button></button>").addClass(
+						"btn btn-danger btn-sm").append("删除");
+				
 				editBtn.click(function() {
 					$("#editDeptModal").modal('show');
 					buildDeptInfo(item.id);
 				});
-				var deleteBtn = $("<button></button>").addClass(
-						"btn btn-danger btn-sm").append(
-						$("<span></span>")
-								.addClass("glyphicon glyphicon-trash").append(
-										"删除"));
 				deleteBtn.click(function() {
 					alert("注意：如果部门中存在员工，则不可以删除");
 					if (confirm("确定删除" + item.name + "?")) {
@@ -186,12 +185,42 @@
 					}
 
 				});
-				var operationTd = $("<td></td>").append(editBtn).append(" ")
+				var operationTd = $("<td></td>").append(showDetailBtn).append(" ").append(editBtn).append(" ")
 						.append(deleteBtn);
 				var deptItemTr = $("<tr></tr>").append(totalTd)
 						.append(deptNoTd).append(nameTd).append(empNumTd)
 						.append(remarkTd).append(operationTd);
 				deptItemTr.appendTo($("tbody"));
+				showDetailBtn.click(function(){
+					 $('table:first tbody tr.jobs').remove();
+					var jobs = searchAndShowJob(item.number,item.name,deptItemTr);
+				});
+			});
+		}
+		
+		/* 根据部门编号查找岗位 */
+		function searchAndShowJob(deptNO,deptName,deptItemTr){
+	
+			$.ajax({
+				url:"${APP_PATH}/selectJobByDept",
+				type:"get",
+				data:"deptNO="+deptNO,
+				success:function(result){
+					console.log(result);
+					var info=deptName+"无岗位信息";
+					/*遍历出要显示jobs结果*/
+					if(result.length>0){
+						info = deptName+"下的岗位有：";
+						for(a in result){
+							info += result[a].jobname+" ";
+						}
+						info += "<br/> 若要修改岗位信息，请点击<a href='${APP_PATH}/view/product/job.jsp'>岗位管理</a>" 
+					}
+					var jobItemTr = $("<tr></tr>").addClass("jobs");
+					var jobTd = $("<td></td>").attr("colspan", 6).append(info);
+					jobTd.appendTo(jobItemTr); 
+					deptItemTr.after(jobItemTr);
+				}
 			});
 		}
 		/*输入完新增的部门名后，判断是否有重复的部门*/
