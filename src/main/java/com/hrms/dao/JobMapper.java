@@ -10,7 +10,7 @@ public interface JobMapper {
 
     int deleteByExample(JobExample example);
 
-    int deleteByPrimaryKey(Short jobid);
+    int deleteByPrimaryKey(Integer jobid);
 
     int insert(Job record);
 

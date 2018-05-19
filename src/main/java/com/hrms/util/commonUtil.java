@@ -13,16 +13,16 @@ import sun.security.util.Length;
 
 public class commonUtil {
 	public static boolean isNullOrEmpty(List<Object> values) {
-		for(Object value:values) {
+		for (Object value : values) {
 			if (value == null) {
 				return true;
 			}
 			if (value instanceof CharSequence) {
-				return ((CharSequence)value).length() == 0;
+				return ((CharSequence) value).length() == 0;
 			}
 		}
 		return false;
-		
+
 	}
 
 	public static Msg stringToDate(String time) throws ParseException {
@@ -44,10 +44,21 @@ public class commonUtil {
 		String timeString = sdf.format(time);
 		return Msg.success().add("time", timeString);
 	}
-	
+
 	public static String generateJobNO(String jobName, String deptNO) {
-		String JobNO  = deptNO.replaceFirst("DEPT", "JOB").concat("-"+Chinese2Alph.String2Alpha(jobName)+new Random().nextInt(100));
+		String JobNO = deptNO.replaceFirst("DEPT", "JOB")
+				.concat("-" + Chinese2Alph.String2Alpha(jobName) + new Random().nextInt(100));
 		return JobNO;
-		
+
+	}
+
+	public static Integer[] analyze(String jobsId) {
+		String[] IdsString =jobsId.split("_");
+		Integer[] IdsInt = new Integer[IdsString.length] ;
+		for(int i=0;i<IdsString.length-1;i++) {
+			IdsInt[i] = Integer.valueOf(IdsString[i+1]);
+		}
+		System.out.println(IdsInt.toString());
+		return IdsInt;
 	}
 }

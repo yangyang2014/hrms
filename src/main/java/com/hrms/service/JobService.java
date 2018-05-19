@@ -23,7 +23,7 @@ public class JobService {
 
 	public ArrayList<Job> selectByDept(String deptName) {
 		JobExample jobExample = new JobExample();
-		
+
 		if (!deptName.equals("allDepts")) {
 			System.out.println(deptName);
 			jobExample.or().andDeptnoEqualTo(deptName);
@@ -40,6 +40,14 @@ public class JobService {
 	public Job selectById(Integer id) {
 		Job job = jobMapper.selectByPrimaryKey(id);
 		return job;
+	}
+
+	public Integer delete(String jobsId) {
+		Integer[] jobsIdInteger = commonUtil.analyze(jobsId);
+		for (Integer jobId : jobsIdInteger) {
+			jobMapper.deleteByPrimaryKey(jobId);
+		}
+		return 1;//1:表示删除成功
 	}
 
 }

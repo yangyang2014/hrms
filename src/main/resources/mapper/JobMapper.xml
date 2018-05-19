@@ -90,7 +90,7 @@
     from job
     where JobID = #{jobid,jdbcType=SMALLINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from job
     where JobID = #{jobid,jdbcType=SMALLINT}
   </delete>

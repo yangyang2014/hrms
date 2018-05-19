@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hrms.bean.Job;
@@ -59,6 +60,14 @@ public class JobController {
 		Job job = jobService.selectById(id);
 		return new ResponseEntity<>(job, HttpStatus.OK);
 
+	}
+	
+	@RequestMapping("/deleteJobs")
+	@ResponseBody
+	public ResponseEntity<Integer> deleteJobs(@RequestParam(value = "jobs") String jobs) {
+		System.out.println("jobs="+jobs);
+		Integer result = jobService.delete(jobs);
+		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}
 
 }

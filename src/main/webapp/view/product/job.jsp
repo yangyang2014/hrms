@@ -47,7 +47,7 @@
 					data-target="#addJobDiv">新岗位</button>
 				<button id="deleteJob" class="btn btn-sm btn-info">删除</button>
 				<button class="btn btn-sm btn-info" disabled="disabled">修改</button>
-				
+
 			</div>
 			<div class="col-md-4 col-md-offset-3">
 				<form class="form-inline">
@@ -56,11 +56,11 @@
 
 						<div class="input-group">
 							<span class="input-group-addon">岗位</span><input type="text"
-								class="form-control" id="jobName" placeholder="初级工程师">
+								class="form-control" id="jobNameSearch" placeholder="初级工程师">
 						</div>
 					</div>
 
-					<button type="submit" class="btn btn-sm btn-primary">搜索</button>
+					<button type="submit"id="searchByJobName" class="btn btn-sm btn-primary">搜索</button>
 				</form>
 			</div>
 		</div>
@@ -129,6 +129,7 @@
 		$(document).ready(function() {
 			getJobInfo();
 			getDeptInfo();
+			/* 保存按钮点击事件 */
 			$("#saveJob").click(function() {
 				var datas = $("#addJobForm").serializeArray();
 				console.log(datas);
@@ -140,20 +141,29 @@
 				}
 
 			});
-			$("#deleteJob").click(function(){
+			/* 删除按钮点击事件 */
+			$("#deleteJob").click(function() {
 				var checkboxs = $(".checkbox");
-				var jobs = [];
-				
-				$.each(checkboxs,function(index,checkbox){
-					var job ={};
-					 console.log(checkbox.checked); 
-					job.jobid = $(checkbox).val();
-					jobs.push(job); 
+				var jobs="";
+			   /* 循环，构建删除的jobId字符串 */
+				$.each(checkboxs, function(index, checkbox) {
+					
+					if (checkbox.checked) {
+						jobs += "_"+$(checkbox).val();
+					}
 				});
-				console.log(jobs);
-			//	var jobId ;
+				if (jobs.length == 0) {
+					alert("您未选择需要删除的岗位");
+				} else {
+					deleteJobs(jobs);//删除选中的岗位,并显示
+				}
 			});
-			
+			/* 搜索按钮点击事件 */
+			$("#searchByJobName").click(function(){
+				var jobName =  $("#jobNameSearch").val();
+				searchByJobName(jobName);
+			});
+
 		});
 		/*  获取岗位信息*/
 		function getJobInfo() {
@@ -171,7 +181,8 @@
 			$.each(jobs, function(index, job) {
 				var Tr = $("<tr></tr>").attr("class", "active");
 				var TdCheckbox = $("<td></td>").append(
-						$("<input type='checkbox'>").attr("value",job.jobid).attr("class","checkbox"));
+						$("<input type='checkbox'>").attr("value", job.jobid)
+								.attr("class", "checkbox"));
 				var TdSum = $("<td></td>").append(sum++);
 				var TdJobName = $("<td></td>").append(job.jobname);
 				var TdDeptName = $("<td></td>").append(job.deptno);
@@ -243,18 +254,39 @@
 			return true;
 		}
 		/*显示提醒信息 */
-		function showReminder() {
-			alert("你的输入有误，请重新检查");
+		function showReminder(reminder) {
+			alert(reminder);
 		}
 		/*根据下拉框选择的部门，获取相应的岗位信息  */
 		function getJobByChooseDept() {
 			var deptNO = $("#deptNameSelectToSearch option:selected").val();
 			$.ajax({
 				url : "${APP_PATH}/selectJobByDept",
+				type: "post",
 				data : "deptNO=" + deptNO,
 				success : function(jobs) {
 					showJobs(jobs);
-
+				}
+			});
+		}
+		/* 删除岗位  */
+		function deleteJobs(jobs){
+			$.ajax({
+				url : "${APP_PATH}/deleteJobs",
+				data : "jobs="+jobs,
+				success : function(result) {
+					showReminder("删除成功");
+					getJobInfo();
+				}
+			});
+		}
+		/* 搜索某个岗位 */
+		function searchByJobName(jobName){
+			$.ajax({
+				url:"${APP_PATH}/deleteJobs",
+				data:"jobname="+jobName,
+				success:function(result){
+					console.log(result);
 				}
 			});
 		}
