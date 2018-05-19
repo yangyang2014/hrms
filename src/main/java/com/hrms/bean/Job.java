@@ -4,14 +4,16 @@ public class Job {
     private int jobid;
 
     private String jobno;
-
+    
+    private String jobname;
+    
     private String deptno;
 
     private String jobremark;
 
     private int jobplannum;
 
-    private String jobname;
+   
 
     public int getJobid() {
         return jobid;

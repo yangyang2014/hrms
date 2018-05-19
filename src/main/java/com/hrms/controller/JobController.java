@@ -41,7 +41,7 @@ public class JobController {
 	public ResponseEntity<ArrayList<Job>> selectByDept(String deptNO) {
 		System.out.println("----in selectByDept-----");
 		ArrayList<Job> jobs = jobService.selectByDept(deptNO);
-		return new ResponseEntity<>(jobs,HttpStatus.OK);
+		return new ResponseEntity<>(jobs, HttpStatus.OK);
 
 	}
 
@@ -49,7 +49,7 @@ public class JobController {
 	@ResponseBody
 	public ResponseEntity<ArrayList<Job>> selectAll() {
 		ArrayList<Job> jobs = jobService.selectAll();
-		return new ResponseEntity<>(jobs,HttpStatus.OK);
+		return new ResponseEntity<>(jobs, HttpStatus.OK);
 
 	}
 
@@ -57,7 +57,7 @@ public class JobController {
 	@ResponseBody
 	public ResponseEntity<Job> selectById(Integer id) {
 		Job job = jobService.selectById(id);
-		return new ResponseEntity<>(job,HttpStatus.OK);
+		return new ResponseEntity<>(job, HttpStatus.OK);
 
 	}
 

@@ -17,14 +17,18 @@ public class JobService {
 	JobMapper jobMapper;
 
 	public Integer addJob(Job job) {
-		job.setJobno(commonUtil.generateJobNO(job.getJobname(),job.getDeptno()));
-		return 	jobMapper.insert(job);
+		job.setJobno(commonUtil.generateJobNO(job.getJobname(), job.getDeptno()));
+		return jobMapper.insert(job);
 	}
 
 	public ArrayList<Job> selectByDept(String deptName) {
 		JobExample jobExample = new JobExample();
-		jobExample.or().andDeptnoEqualTo(deptName);
-		ArrayList<Job> jobs= (ArrayList<Job>) jobMapper.selectByExample(jobExample);
+		
+		if (!deptName.equals("allDepts")) {
+			System.out.println(deptName);
+			jobExample.or().andDeptnoEqualTo(deptName);
+		}
+		ArrayList<Job> jobs = (ArrayList<Job>) jobMapper.selectByExample(jobExample);
 		return jobs;
 	}
 
@@ -37,8 +41,5 @@ public class JobService {
 		Job job = jobMapper.selectByPrimaryKey(id);
 		return job;
 	}
-
-	
-	
 
 }

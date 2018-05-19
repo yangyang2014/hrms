@@ -31,22 +31,25 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-2">
 				<form class="form-inline">
 					<div class="input-group">
 						<span class="input-group-addon">部门</span> <select
-							class="form-control" id="deptName">
-							<option>部门1</option>
-							<option>部门2</option>
-							<option>部门3</option>
+							class="form-control departmentDisplay"
+							id="deptNameSelectToSearch" onchange="getJobByChooseDept()">
+							<option value="allDepts">全部</option>
 						</select>
 					</div>
-					<button class="btn btn-sm btn-info">新岗位</button>
-					<button class="btn btn-sm btn-info">修改</button>
-					<button class="btn btn-sm btn-info">删除</button>
 				</form>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
+				<button class="btn btn-sm btn-info" data-toggle="collapse"
+					data-target="#addJobDiv">新岗位</button>
+				<button id="deleteJob" class="btn btn-sm btn-info">删除</button>
+				<button class="btn btn-sm btn-info" disabled="disabled">修改</button>
+				
+			</div>
+			<div class="col-md-4 col-md-offset-3">
 				<form class="form-inline">
 
 					<div class="form-group">
@@ -61,6 +64,46 @@
 				</form>
 			</div>
 		</div>
+		<!-- 添加新岗位区域-->
+		<div class="collapse row" id="addJobDiv">
+			<div class="">
+				<form class="form-inline" id="addJobForm">
+					<div class="form-group">
+						<label for="deptno">部门</label> <select
+							class="form-control departmentDisplay" id="deptno" name="deptno">
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="jobname">岗位名</label> <input type="text"
+							class="form-control" id="jobname" name="jobname"
+							placeholder="必须是中文，如 服务岗">
+					</div>
+					<div class="form-group">
+						<label for="jobplannum">计划人数</label> <input type="text"
+							class="form-control" id="jobplannum" name="jobplannum"
+							placeholder="必须是数字，如 10">
+					</div>
+					<div class="form-group">
+						<label for="salary">基本薪资</label> <input id="salary" name="salary"
+							type="text" class="form-control" placeholder="该功能未开放" readonly>
+					</div>
+					<br />
+					<hr />
+					<div class="form-group">
+						<label for="jobremark">职责</label>
+						<textarea class="form-control" rows="2" style="width: 400px"
+							id="jobremark" name="jobremark"></textarea>
+						<button type="button" class="btn btn-info" id="saveJob">保存</button>
+						<button type="button" class="btn" data-toggle="collapse"
+							data-target="#addJobDiv">取消</button>
+					</div>
+
+				</form>
+			</div>
+		</div>
+
+
+
 		<div class="row margin-top-sm">
 			<table class="table table-condensed table-hover">
 				<thead>
@@ -79,30 +122,56 @@
 			</table>
 		</div>
 
+
 	</div>
 	<script>
+		/* 初始化页面是获取job信息 和部门信息 */
 		$(document).ready(function() {
 			getJobInfo();
-		});
+			getDeptInfo();
+			$("#saveJob").click(function() {
+				var datas = $("#addJobForm").serializeArray();
+				console.log(datas);
+				var isValidated = validate(datas);//验证数据是否合法
+				if (isValidated) {
+					saveJobs(datas);//保存
+				} else {
+					showReminder("你的输入有误");//显示提示
+				}
 
+			});
+			$("#deleteJob").click(function(){
+				var checkboxs = $(".checkbox");
+				var jobs = [];
+				
+				$.each(checkboxs,function(index,checkbox){
+					var job ={};
+					 console.log(checkbox.checked); 
+					job.jobid = $(checkbox).val();
+					jobs.push(job); 
+				});
+				console.log(jobs);
+			//	var jobId ;
+			});
+			
+		});
+		/*  获取岗位信息*/
 		function getJobInfo() {
 			$.ajax({
 				url : "${APP_PATH}/selectAllJob",
-
 				success : function(result) {
-					console.log(result);
 					showJobs(result);
 				}
 			});
-
 		}
-
+		/*渲染岗位信息  */
 		function showJobs(jobs) {
+			$("tbody").empty();
 			var sum = 1;
 			$.each(jobs, function(index, job) {
 				var Tr = $("<tr></tr>").attr("class", "active");
-				var TdCheckout = $("<td></td>").append(
-						"<input type='checkbox'>");
+				var TdCheckbox = $("<td></td>").append(
+						$("<input type='checkbox'>").attr("value",job.jobid).attr("class","checkbox"));
 				var TdSum = $("<td></td>").append(sum++);
 				var TdJobName = $("<td></td>").append(job.jobname);
 				var TdDeptName = $("<td></td>").append(job.deptno);
@@ -110,11 +179,84 @@
 						"job_person" + "/" + job.jobplannum);
 				var TdPerson = $("<td></td>").append("暂无");
 				var TdSalary = $("<td></td>").append("暂无");
-				Tr.append(TdCheckout).append(TdSum).append(TdJobName).append(TdDeptName)
-						.append(TdPersonNum).append(TdPerson).append(TdSalary);
+				Tr.append(TdCheckbox).append(TdSum).append(TdJobName).append(
+						TdDeptName).append(TdPersonNum).append(TdPerson)
+						.append(TdSalary);
 				Tr.appendTo($("tbody"));
 			});
+		}
 
+		/*  获取部门信息*/
+		function getDeptInfo() {
+			$.ajax({
+				url : "${APP_PATH}/getDeptments",
+				success : function(result) {
+					console.log(result);
+					showDepts(result.extend.departments);
+				}
+			});
+		}
+
+		/* 渲染部门信息到下拉框 */
+		function showDepts(departments) {
+			$.each(departments, function(index, department) {
+				$(".departmentDisplay").append(
+						$("<option></option>").append(department.name).attr(
+								"value", department.number));
+			});
+		}
+
+		/*保存新增的岗位信息  */
+		function saveJobs(jobInfo) {
+			alert("save-------");
+			$.ajax({
+				url : "${APP_PATH}/addJob",
+				data : jobInfo,
+				success : function(result) {
+					console.log(result);
+					alert("成功新增一个岗位");
+					getJobInfo();
+					$("#addJobForm input").val("");
+
+				}
+			});
+		}
+
+		/*验证数据是否合法  */
+		function validate(datas) {
+			for (index in datas) {
+				var name = datas[index].name;
+				var value = datas[index].value;
+				if (name == "jobname") {
+					var regChina = /^[\u4e00-\u9fa5]{1,}$/;
+					if (!regChina.exec(value)) {
+						return false;
+					}
+				}
+				if (name == "jobplannum") {
+					var regNum = /^[1-9][0-9]*$/;
+					if (!regNum.exec(value)) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		/*显示提醒信息 */
+		function showReminder() {
+			alert("你的输入有误，请重新检查");
+		}
+		/*根据下拉框选择的部门，获取相应的岗位信息  */
+		function getJobByChooseDept() {
+			var deptNO = $("#deptNameSelectToSearch option:selected").val();
+			$.ajax({
+				url : "${APP_PATH}/selectJobByDept",
+				data : "deptNO=" + deptNO,
+				success : function(jobs) {
+					showJobs(jobs);
+
+				}
+			});
 		}
 	</script>
 </body>
