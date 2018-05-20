@@ -1,6 +1,7 @@
 package com.hrms.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,11 @@ public class LoginController {
 			@RequestParam(value = "password") String password, HttpServletRequest request) {
 		System.out.println("name=" + name + ",password=" + password);
 		if (name.equals("admin") && password.equals("123456")) {
-		
+			  HttpSession session = request.getSession();  
+	          session.setAttribute("username",name);  
+	          session.setAttribute("password",password);  
+	          session.setAttribute("roleName", "系统管理员");
+	          session.setAttribute("roleId", "1");
 			return new ModelAndView("../index");
 		} else {
 			return new ModelAndView("../login");

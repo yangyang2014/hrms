@@ -1,4 +1,6 @@
-﻿<!DOCTYPE HTML>
+﻿<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<!DOCTYPE HTML>
 <HTML xmlns="http://www.w3.org/1999/xhtml">
 <HEAD id=Head1>
 <TITLE>顶部</TITLE>
@@ -55,7 +57,10 @@ P {
 									<TD align=right height=35></TD>
 								</TR>
 								<TR>
-									<TD height=35><A href="../login.jsp" target=_top><FONT color=red><B>安全退出</B></FONT></A>
+									<TD></TD>
+									<TD height=35>
+										<span style="font-color:grey;margin-right:10px;"><%=session.getAttribute("roleName") %>:<%=session.getAttribute("username") %>在线</span>
+										<A href="../login.jsp" target=_top><FONT color=red><B>退出系统</B></FONT></A>
 									</TD>
 								</TR>
 							</TBODY>

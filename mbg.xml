@@ -37,7 +37,7 @@
     </javaClientGenerator>
 
   
- 	<table tableName="job" domainObjectName="Job" ></table>
+ 	<table tableName="user" domainObjectName="user" ></table>
  	
 
   </context>
