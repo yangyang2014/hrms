@@ -33,6 +33,7 @@ public class LoginController {
 			user user = users.get(0);
 			int roleId = Integer.parseInt(user.getRoleid());
 			HttpSession session = request.getSession();
+			session.setAttribute("user", user);
 			session.setAttribute("username", user.getUsername());
 			session.setAttribute("roleName", constant.Role.gerRole(roleId));
 			session.setAttribute("roleId", user.getRoleid());

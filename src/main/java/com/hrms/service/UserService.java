@@ -27,5 +27,24 @@ public class UserService {
 		List<user> users = userMapper.selectByExample(null);
 		return users;
 	}
+	public int changePassword(user user, String password) {
+		
+		user.setPassword(password);
+		userExample userExample = new userExample();
+		userExample.or().andUsernameEqualTo(user.getUsername());
+		
+		return userMapper.updateByExample(user, userExample);
+	}
+	public int deleteUser(user user) {
+		userMapper.deleteByPrimaryKey(user.getId());
+		return 1;
+	}
+	public int addUser(user user) {
+		user.setPassword("123456");
+		user.setRemark("暂无");
+		userMapper.insert(user);
+		return 1;
+		
+	}
 	
 }
