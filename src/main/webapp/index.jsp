@@ -24,7 +24,7 @@
 		%>
 		<FRAMESET frameSpacing=0 frameBorder=0 cols=220,*>
 			<FRAME name=menu src="view/menu.jsp" frameBorder=0 noResize>
-			<FRAME name=main src="view/product/employee.jsp" frameBorder=0>
+			<FRAME name=main src="home.jsp" frameBorder=0>
 			<%
 				} else {
 			%>

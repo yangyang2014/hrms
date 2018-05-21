@@ -36,10 +36,10 @@ TD {
 
 		<SCRIPT type=text/javascript>
 			//<![CDATA[
-			Sys.WebForms.PageRequestManager._initialize('ScriptManager1',
-					document.getElementById('form1'));
-			Sys.WebForms.PageRequestManager.getInstance()._updateControls(
-					[ 'tUpdatePanel1' ], [], [], 90);
+			/* 	Sys.WebForms.PageRequestManager._initialize('ScriptManager1',
+						document.getElementById('form1'));
+				Sys.WebForms.PageRequestManager.getInstance()._updateControls(
+						[ 'tUpdatePanel1' ], [], [], 90); */
 			//]]>
 		</SCRIPT>
 
@@ -49,7 +49,7 @@ TD {
 			<DIV id=div2
 				style="LEFT: 0px; POSITION: absolute; TOP: 0px; BACKGROUND-COLOR: #0066ff"></DIV>
 			<SCRIPT language=JavaScript>
-				var speed = 20;
+				/* var speed = 20;
 				var temp = new Array();
 				var clipright = document.body.clientWidth / 2, clipleft = 0
 				for (i = 1; i <= 2; i++) {
@@ -66,7 +66,7 @@ TD {
 					if (clipright <= 0)
 						clearInterval(tim);
 				}
-				tim = setInterval("openit()", 100);
+				tim = setInterval("openit()", 100); */
 			</SCRIPT>
 
 			<DIV>&nbsp;&nbsp;</DIV>
@@ -96,12 +96,14 @@ TD {
 																style="WIDTH: 130px" type=text name=name></TD>
 															<TD style="HEIGHT: 28px" width=370><SPAN
 																id=RequiredFieldValidator3
-																style="FONT-WEIGHT: bold; VISIBILITY: hidden; COLOR: white">请输入登录名</SPAN></TD>
+													  			style="FONT-WEIGHT: bold; VISIBILITY: hidden; COLOR: white"
+																placeholder="username" value=" ">请输入登录名</SPAN></TD>
 														</TR>
 														<TR>
 															<TD style="HEIGHT: 28px">登录密码：</TD>
 															<TD style="HEIGHT: 28px"><INPUT id=txtPwd
-																style="WIDTH: 130px" type=password name=password></TD>
+																style="WIDTH: 130px" type=password name=password
+																value=""></TD>
 															<TD style="HEIGHT: 28px"><SPAN
 																id=RequiredFieldValidator4
 																style="FONT-WEIGHT: bold; VISIBILITY: hidden; COLOR: white">请输入密码</SPAN></TD>
@@ -120,6 +122,16 @@ TD {
 																type=image src="static/login_files/login_button.gif"
 																name=btn></TD>
 														</TR>
+														<TR>
+															<TD colspan="2">
+																<%
+																	String result = (String) request.getAttribute("result");
+																	if (result != null) {
+																		out.println("<span style='font-color:red'>" + result + "</span>");
+																	}
+																%>
+															</TD>
+														</TR>
 													</TBODY>
 												</TABLE>
 											</TD>
@@ -137,5 +149,13 @@ TD {
 		</DIV>
 
 	</FORM>
+	<script>
+		var input = document.getElementsByTagName("input");
+		for (i = 0; i < input.length; i++) {
+			if (input[i].defaultValue == input[i].value) {
+				input[i].value = "";
+			}
+		}
+	</script>
 </BODY>
 </HTML>

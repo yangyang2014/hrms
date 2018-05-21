@@ -15,7 +15,7 @@
 <script
 	src="${APP_PATH}/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 
-<link href="${APP_PATH}/static/css/job.css" rel="stylesheet">
+<link href="${APP_PATH}/static/css/systemManage.css" rel="stylesheet">
 <title>人力资源管理系统</title>
 </head>
 <body>
@@ -25,76 +25,51 @@
 				<h2>系统管理</h2>
 				<ol class="breadcrumb">
 					<li>系统管理</li>
-					<li class="active">角色分配</li>
+					<li class="active">角色管理</li>
 				</ol>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-2">
-				<form class="form-inline">
-					<div class="input-group">
-						<span class="input-group-addon">部门</span> <select
-							class="form-control departmentDisplay"
-							id="deptNameSelectToSearch" onchange="getJobByChooseDept()">
-							<option value="allDepts">全部</option>
-						</select>
-					</div>
-				</form>
-			</div>
-			<div class="col-md-3">
 				<button class="btn btn-sm btn-info" data-toggle="collapse"
-					data-target="#addJobDiv">新岗位</button>
-				<button id="deleteJob" class="btn btn-sm btn-info">删除</button>
-				<button class="btn btn-sm btn-info" disabled="disabled">修改</button>
-
+					data-target="#addUserDiv">新用户</button>
 			</div>
-			<div class="col-md-4 col-md-offset-3">
+			<div class="col-md-4">
 				<form class="form-inline">
-
 					<div class="form-group">
-
 						<div class="input-group">
-							<span class="input-group-addon">岗位</span><input type="text"
-								class="form-control" id="jobNameSearch" placeholder="初级工程师">
+							<span class="input-group-addon">用户名</span><input type="text"
+								class="form-control" id="userNameSearch" placeholder="admin">
 						</div>
 					</div>
 
-					<button type="submit"id="searchByJobName" class="btn btn-sm btn-primary">搜索</button>
+					<button type="submit" id="searchByUserName"
+						class="btn btn-sm btn-primary">搜索</button>
 				</form>
 			</div>
+			<div class="col-md-6"></div>
 		</div>
 		<!-- 添加新岗位区域-->
-		<div class="collapse row" id="addJobDiv">
+		<div class="collapse row" id="addUserDiv">
 			<div class="">
-				<form class="form-inline" id="addJobForm">
+				<form class="form-inline" id="addUserForm">
 					<div class="form-group">
-						<label for="deptno">部门</label> <select
-							class="form-control departmentDisplay" id="deptno" name="deptno">
+						<label for="role">角色</label> <select class="form-control"
+							id="role" name="roleid">
+							<option value="1">系统管理员</option>
+							<option value="2">人事管理员</option>
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="jobname">岗位名</label> <input type="text"
+						<label for="jobname">用户名</label> <input type="text"
 							class="form-control" id="jobname" name="jobname"
-							placeholder="必须是中文，如 服务岗">
+							placeholder="必须由英文、数字和下划线组成">
 					</div>
+
 					<div class="form-group">
-						<label for="jobplannum">计划人数</label> <input type="text"
-							class="form-control" id="jobplannum" name="jobplannum"
-							placeholder="必须是数字，如 10">
-					</div>
-					<div class="form-group">
-						<label for="salary">基本薪资</label> <input id="salary" name="salary"
-							type="text" class="form-control" placeholder="该功能未开放" readonly>
-					</div>
-					<br />
-					<hr />
-					<div class="form-group">
-						<label for="jobremark">职责</label>
-						<textarea class="form-control" rows="2" style="width: 400px"
-							id="jobremark" name="jobremark"></textarea>
 						<button type="button" class="btn btn-info" id="saveJob">保存</button>
 						<button type="button" class="btn" data-toggle="collapse"
-							data-target="#addJobDiv">取消</button>
+							data-target="#addUserDiv">取消</button>
 					</div>
 
 				</form>
@@ -104,23 +79,64 @@
 
 
 		<div class="row margin-top-sm">
-			<table class="table table-condensed table-hover">
+			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th><input type="checkbox"></th>
-						<th>#</th>
-						<th>岗位</th>
-						<th>所属部门</th>
-						<th>现人数/计划数</th>
-						<th>成员</th>
-						<th>基本薪水</th>
 
+						<th><button>查看系统日志</button></th>
+						<th><button>查看所有用户</button></th>
+						<th></th>
+						<th></th>
+						<th><div style="width: 20px; height: 20px; background: red;"></div>系统管理员</th>
+						<th><div style="width: 20px; height: 20px; background: blue;"></div>人事管理员</th>
+						<th><div
+								style="width: 20px; height: 20px; background: green;"></div>普通用户</th>
 					</tr>
 				</thead>
 				<tbody></tbody>
 			</table>
 		</div>
 	</div>
+	<script>
+		$(document).ready(function() {
+			getAllUser();
+		});
+		/* 获取所有用户信息 */
+		function getAllUser() {
+			$.ajax({
+				url : "${APP_PATH}/getAllUsers",
+				success : function(users) {
+					buildUserView(users);
+				}
+			});
+		}
+		/* 渲染到页面 */
+		function buildUserView(users) {
+			var userTr = $("<tr></tr>");
+			$.each(users, function(index, user) {
+				var userTd = $("<td></td>")
+				var userDiv = $("<div></div").append(user.username);
+				if (user.roleid == 1) {
+					userDiv.attr("class", "sys_admin");
+				} else if (user.roleid == 2) {
+					userDiv.attr("class", "person_admin");
+				} else if (user.roleid == 3) {
+					userDiv.attr("class", "user");
+				}
+				var resetButton = $("<button></button>").append("密码重置");
+				var deleteButton = $("<button></button>").append("删除用户");
+				var buttonDiv =$("<div></div>").append(resetButton).append(deleteButton).css("display","block");
+				userTd.append(userDiv).append(buttonDiv);
+				userTr.append(userTd);
+				var pos = index + 1;
+				if (pos % 7 == 0 && pos > 0) {
+					$("tbody").append(userTr);
+					userTr = $("<tr></tr>");
+				}
 
+			});
+			$("tbody").append(userTr);
+		}
+	</script>
 </body>
 </html>

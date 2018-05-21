@@ -61,8 +61,10 @@ P {
 									<TD height=35>
 										<span style="font-color:grey;margin-right:10px;"><%=session.getAttribute("roleName") %>:<%=session.getAttribute("username") %>在线</span>
 										<A href="../login.jsp" target=_top><FONT color=red><B>退出系统</B></FONT></A>
+										<a href="#">修改密码</a>
 									</TD>
 								</TR>
+								
 							</TBODY>
 						</TABLE>
 					</TD>
