@@ -1,0 +1,32 @@
+.sys_admin {
+	color: white;
+	background: red;
+	border: 1px solid #f10707;
+	padding: 4px;
+	text-align: center;
+	font-weight: bold;
+	border-radius: 5px;
+	font-size: 20px;
+}
+
+.person_admin {
+	background: blue;
+	border: 1px solid blue;
+	border-radius: 5px;
+	padding: 4px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+	color: white;
+}
+
+.user {
+	background: green;
+	border: 1px solid green;
+	border-radius: 5px;
+	padding: 4px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+	color: white;
+}

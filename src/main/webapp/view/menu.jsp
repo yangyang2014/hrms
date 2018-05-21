@@ -91,7 +91,7 @@ A.active {
 	}
 </SCRIPT>
 <BODY>
-	<FORM id=form1 name=form1 method=post>
+ <form id=form1 name=form1 method=post>
 		<TABLE cellSpacing=0 cellPadding=0 width=210 align=center border=0>
 			<TBODY>
 				<TR>
@@ -113,7 +113,7 @@ A.active {
 								
 								<TR>
 									<TD class=mainMenu onClick="MenuDisplay('table_2');"><SPAN
-										class=span id=table_2Span>＋</SPAN> 部门管理</TD>
+										class=span id=table_2Span>＋</SPAN> 组织管理</TD>
 								</TR>
 								<TR>
 									<TD>
@@ -122,7 +122,11 @@ A.active {
 											<TBODY>
 												<TR>
 													<TD class=menuSmall><A class=style2 href="product/department.jsp"
-														target=main>－ 部门列表</A></TD>
+														target=main>－ 部门岗位</A></TD>
+												</TR>
+												<TR>
+													<TD class=menuSmall><A class=style2 href="product/job.jsp"
+														target=main>－ 岗位管理</A></TD>
 												</TR>
 											</TBODY>
 										</TABLE>
@@ -193,7 +197,7 @@ A.active {
 										</TABLE>
 									</TD>
 								</TR>
-
+							</TBODY></TABLE></TD></TR></TBODY></TABLE>
 								<TABLE cellSpacing=0 cellPadding=0 width=210 align=center
 									border=0>
 									<TBODY>

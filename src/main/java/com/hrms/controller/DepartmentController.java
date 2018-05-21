@@ -1,5 +1,6 @@
 package com.hrms.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -67,7 +68,9 @@ public class DepartmentController {
 	@ResponseBody
 	public ResponseEntity<Integer> validateDeptment(String deptName) throws NullPointerException {
 		// 请求值为空，返回异常信息
-		if (commonUtil.isNullOrEmpty(deptName)) {
+		List<Object> validateData = new ArrayList<>();
+		validateData.add(deptName);
+		if (commonUtil.isNullOrEmpty(validateData)) {
 			return new ResponseEntity<Integer>(2, HttpStatus.OK);
 		}
 		boolean result = departmentService.validateDeptment(deptName);

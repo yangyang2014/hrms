@@ -14,10 +14,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.hrms.bean.Department;
 import com.hrms.bean.Employee;
+import com.hrms.bean.Job;
 import com.hrms.bean.Question;
 import com.hrms.bean.Recruitment;
 import com.hrms.dao.DepartmentMapper;
 import com.hrms.dao.EmployeeMapper;
+import com.hrms.dao.JobMapper;
 import com.hrms.dao.QuestionMapper;
 import com.hrms.dao.RecruitmentMapper;
 
@@ -33,14 +35,25 @@ public class MapperTest {
 	@Autowired
 	QuestionMapper questionMapper;
 	@Autowired
+	JobMapper jobMapper;
+	@Autowired
 	SqlSession sqlSession;
 
 	@Test
-	public void getCount() {
-		long sum = questionMapper.countByExample(null);
-		System.out.println(sum);
+	public void insertJob() {
+		sqlSession.getMapper(RecruitmentMapper.class);
+		Job job = new Job();
+		job.setDeptno("DEPT-OD9");
+		job.setJobno("JOB-SS12");
+		job.setJobname("中级");
+		job.setJobplannum(10);
+		jobMapper.insert(job);
 	}
 
+	/*
+	 * @Test public void getCount() { long sum =
+	 * questionMapper.countByExample(null); System.out.println(sum); }
+	 */
 	/*
 	 * @Test public void addRecruit() { RecruitmentMapper mapper =
 	 * sqlSession.getMapper(RecruitmentMapper.class); for(int i=0;i<10;i++) {

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hrms.dao.JobMapper">
+  <resultMap id="BaseResultMap" type="com.hrms.bean.Job">
+    <id column="JobID" jdbcType="SMALLINT" property="jobid" />
+    <result column="JobNO" jdbcType="CHAR" property="jobno" />
+    <result column="DeptNO" jdbcType="CHAR" property="deptno" />
+    <result column="JobRemark" jdbcType="CHAR" property="jobremark" />
+    <result column="JobPlanNum" jdbcType="SMALLINT" property="jobplannum" />
+    <result column="JobName" jdbcType="VARCHAR" property="jobname" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    JobID, JobNO, DeptNO, JobRemark, JobPlanNum, JobName
+  </sql>
+  <select id="selectByExample" parameterType="com.hrms.bean.JobExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from job
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Short" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from job
+    where JobID = #{jobid,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from job
+    where JobID = #{jobid,jdbcType=SMALLINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hrms.bean.JobExample">
+    delete from job
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hrms.bean.Job">
+    insert into job (JobID, JobNO, DeptNO, 
+      JobRemark, JobPlanNum, JobName
+      )
+    values (#{jobid,jdbcType=SMALLINT}, #{jobno,jdbcType=CHAR}, #{deptno,jdbcType=CHAR}, 
+      #{jobremark,jdbcType=CHAR}, #{jobplannum,jdbcType=SMALLINT}, #{jobname,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hrms.bean.Job">
+    insert into job
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jobid != null">
+        JobID,
+      </if>
+      <if test="jobno != null">
+        JobNO,
+      </if>
+      <if test="deptno != null">
+        DeptNO,
+      </if>
+      <if test="jobremark != null">
+        JobRemark,
+      </if>
+      <if test="jobplannum != null">
+        JobPlanNum,
+      </if>
+      <if test="jobname != null">
+        JobName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jobid != null">
+        #{jobid,jdbcType=SMALLINT},
+      </if>
+      <if test="jobno != null">
+        #{jobno,jdbcType=CHAR},
+      </if>
+      <if test="deptno != null">
+        #{deptno,jdbcType=CHAR},
+      </if>
+      <if test="jobremark != null">
+        #{jobremark,jdbcType=CHAR},
+      </if>
+      <if test="jobplannum != null">
+        #{jobplannum,jdbcType=SMALLINT},
+      </if>
+      <if test="jobname != null">
+        #{jobname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hrms.bean.JobExample" resultType="java.lang.Long">
+    select count(*) from job
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update job
+    <set>
+      <if test="record.jobid != null">
+        JobID = #{record.jobid,jdbcType=SMALLINT},
+      </if>
+      <if test="record.jobno != null">
+        JobNO = #{record.jobno,jdbcType=CHAR},
+      </if>
+      <if test="record.deptno != null">
+        DeptNO = #{record.deptno,jdbcType=CHAR},
+      </if>
+      <if test="record.jobremark != null">
+        JobRemark = #{record.jobremark,jdbcType=CHAR},
+      </if>
+      <if test="record.jobplannum != null">
+        JobPlanNum = #{record.jobplannum,jdbcType=SMALLINT},
+      </if>
+      <if test="record.jobname != null">
+        JobName = #{record.jobname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update job
+    set JobID = #{record.jobid,jdbcType=SMALLINT},
+      JobNO = #{record.jobno,jdbcType=CHAR},
+      DeptNO = #{record.deptno,jdbcType=CHAR},
+      JobRemark = #{record.jobremark,jdbcType=CHAR},
+      JobPlanNum = #{record.jobplannum,jdbcType=SMALLINT},
+      JobName = #{record.jobname,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hrms.bean.Job">
+    update job
+    <set>
+      <if test="jobno != null">
+        JobNO = #{jobno,jdbcType=CHAR},
+      </if>
+      <if test="deptno != null">
+        DeptNO = #{deptno,jdbcType=CHAR},
+      </if>
+      <if test="jobremark != null">
+        JobRemark = #{jobremark,jdbcType=CHAR},
+      </if>
+      <if test="jobplannum != null">
+        JobPlanNum = #{jobplannum,jdbcType=SMALLINT},
+      </if>
+      <if test="jobname != null">
+        JobName = #{jobname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where JobID = #{jobid,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hrms.bean.Job">
+    update job
+    set JobNO = #{jobno,jdbcType=CHAR},
+      DeptNO = #{deptno,jdbcType=CHAR},
+      JobRemark = #{jobremark,jdbcType=CHAR},
+      JobPlanNum = #{jobplannum,jdbcType=SMALLINT},
+      JobName = #{jobname,jdbcType=VARCHAR}
+    where JobID = #{jobid,jdbcType=SMALLINT}
+  </update>
+</mapper>
