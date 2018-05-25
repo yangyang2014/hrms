@@ -37,14 +37,24 @@ public class JobController {
 
 	}
 
-	@RequestMapping("/selectJobByDept")
+	@RequestMapping("/selectJobByDeptId")
 	@ResponseBody
-	public ResponseEntity<ArrayList<Job>> selectByDept(String deptNO) {
-		System.out.println("----in selectByDept-----");
-		ArrayList<Job> jobs = jobService.selectByDept(deptNO);
+	public ResponseEntity<ArrayList<Job>> selectByDeptId(String deptId) {
+		System.out.println("----in selectByDeptId-----");
+		ArrayList<Job> jobs = jobService.selectJobByDeptId(deptId);
 		return new ResponseEntity<>(jobs, HttpStatus.OK);
 
 	}
+	
+	@RequestMapping("/selectJobByDeptNO")
+	@ResponseBody
+	public ResponseEntity<ArrayList<Job>> selectJobByDeptNO(String deptNO) {
+		System.out.println("----in selectJobByDeptNO-----");
+		ArrayList<Job> jobs = jobService.selectByDeptNO(deptNO);
+		return new ResponseEntity<>(jobs, HttpStatus.OK);
+
+	}	
+	
 
 	@RequestMapping("/selectAllJob")
 	@ResponseBody

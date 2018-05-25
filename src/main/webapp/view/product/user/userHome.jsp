@@ -6,7 +6,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <%
 	pageContext.setAttribute("APP_PATH", request.getContextPath());
+	pageContext.setAttribute("username", session.getAttribute("username"));
 %>
+
 <script src="${APP_PATH}/static/js/echarts.simple.min.js"></script>
 <script src="${APP_PATH}/static/js/jquery-1.12.4.min.js"></script>
 <link
@@ -25,102 +27,99 @@
 				<h2>个人管理平台</h2>
 				<ol class="breadcrumb">
 					<li>个人管理</li>
-					<li class="active">信息考勤管理</li>
+					<li class="active">信息管理</li>
 				</ol>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-2">
-				<form class="form-inline">
-					<div class="input-group">
-						<span class="input-group-addon">部门</span> <select
-							class="form-control departmentDisplay"
-							id="deptNameSelectToSearch" onchange="getJobByChooseDept()">
-							<option value="allDepts">全部</option>
-						</select>
-					</div>
-				</form>
-			</div>
-			<div class="col-md-3">
-				<button class="btn btn-sm btn-info" data-toggle="collapse"
-					data-target="#addJobDiv">新岗位</button>
-				<button id="deleteJob" class="btn btn-sm btn-info">删除</button>
-				<button class="btn btn-sm btn-info" disabled="disabled">修改</button>
-
-			</div>
-			<div class="col-md-4 col-md-offset-3">
-				<form class="form-inline">
-
-					<div class="form-group">
-
-						<div class="input-group">
-							<span class="input-group-addon">岗位</span><input type="text"
-								class="form-control" id="jobNameSearch" placeholder="初级工程师">
-						</div>
-					</div>
-
-					<button type="submit"id="searchByJobName" class="btn btn-sm btn-primary">搜索</button>
-				</form>
-			</div>
+			<div class="col-md-2"></div>
+			<div class="col-md-3"></div>
+			<div class="col-md-4 col-md-offset-3"></div>
 		</div>
-		<!-- 添加新岗位区域-->
-		<div class="collapse row" id="addJobDiv">
-			<div class="">
-				<form class="form-inline" id="addJobForm">
-					<div class="form-group">
-						<label for="deptno">部门</label> <select
-							class="form-control departmentDisplay" id="deptno" name="deptno">
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="jobname">岗位名</label> <input type="text"
-							class="form-control" id="jobname" name="jobname"
-							placeholder="必须是中文，如 服务岗">
-					</div>
-					<div class="form-group">
-						<label for="jobplannum">计划人数</label> <input type="text"
-							class="form-control" id="jobplannum" name="jobplannum"
-							placeholder="必须是数字，如 10">
-					</div>
-					<div class="form-group">
-						<label for="salary">基本薪资</label> <input id="salary" name="salary"
-							type="text" class="form-control" placeholder="该功能未开放" readonly>
-					</div>
-					<br />
-					<hr />
-					<div class="form-group">
-						<label for="jobremark">职责</label>
-						<textarea class="form-control" rows="2" style="width: 400px"
-							id="jobremark" name="jobremark"></textarea>
-						<button type="button" class="btn btn-info" id="saveJob">保存</button>
-						<button type="button" class="btn" data-toggle="collapse"
-							data-target="#addJobDiv">取消</button>
-					</div>
-
-				</form>
-			</div>
-		</div>
-
 
 
 		<div class="row margin-top-sm">
-			<table class="table table-condensed table-hover">
-				<thead>
-					<tr>
-						<th><input type="checkbox"></th>
-						<th>#</th>
-						<th>岗位</th>
-						<th>所属部门</th>
-						<th>现人数/计划数</th>
-						<th>成员</th>
-						<th>基本薪水</th>
+			<table>
+				<tr style="font-weight: bold;">
+					<td class="col-sm-2 ">工号</td>
+					<td class="col-sm-2 ">姓名</td>
+					<td class="col-sm-2 ">部门</td>
+					<td class="col-sm-2 ">岗位</td>
+				</tr>
+				<tr style="height: 50px;">
+					<td class="col-sm-2 " id="empno-info"></td>
+					<td class="col-sm-2 " id="empname-info"></td>
+					<td class="col-sm-2 " id="empdept-info"></td>
+					<td class="col-sm-2 " id="empjob-info"></td>
+				</tr>
+				<tr style="font-weight: bold;">
+					<td class="col-sm-2 ">性别</td>
+					<td class="col-sm-2 ">出生年月</td>
+					<td class="col-sm-2 ">电话</td>
+					<td class="col-sm-2 ">邮箱</td>
 
-					</tr>
-				</thead>
-				<tbody></tbody>
+				</tr>
+				<tr style="height: 50px;">
+					<td class="col-sm-2 " id="empgender-info"></td>
+					<td class="col-sm-2 " id="empbirthtime-info"></td>
+					<td class="col-sm-2 " id="empphone-info"></td>
+					<td class="col-sm-2 " id="empemail-info"></td>
+				</tr>
 			</table>
 		</div>
 	</div>
-
+	<script>
+	$(document).ready(function(){
+		getEmployeeInfo();
+	});
+	
+	
+	
+	function getEmployeeInfo(){
+		$.ajax({
+			url:"${APP_PATH}/getEmpByEmpNO",
+			type:"get",
+			data:"empNO=${username}",
+			success:function(result){
+				var employee = result.extend.emp;
+				console.log(employee);
+				buildEmployeeInfo(employee);
+			}
+		});
+	}
+	/*渲染职工详细信息模态框*/
+	
+	function buildEmployeeInfo(employee){
+		var empnoinfoTd = $("#empno-info");
+		var empnameinfoTd = $("#empname-info");
+		var empdeptinfoTd = $("#empdept-info");
+		var empjobinfoTd = $("#empjob-info");
+		var empgenderinfoTd = $("#empgender-info");
+		var empbirthtimeinfoTd = $("#empbirthtime-info");
+		var empphoneinfoTd = $("#empphone-info");
+		var empemailinfoTd = $("#empemail-info");
+		empnoinfoTd.empty();
+		empnoinfoTd.append(employee.empno);
+		empnameinfoTd.empty();
+		empnameinfoTd.append(employee.empName);
+		empdeptinfoTd.empty();
+		empdeptinfoTd.append(employee.department.name);
+		empjobinfoTd.empty();
+		empjobinfoTd.append(employee.job.jobname);
+		empgenderinfoTd.empty();
+		if(employee.gender=='m'||employee.gender=='M'){
+			empgenderinfoTd.append("男");
+		}else{
+			empgenderinfoTd.append("女");
+		}
+		empbirthtimeinfoTd.empty();
+		empbirthtimeinfoTd.append(employee.birthTime);
+		empphoneinfoTd.empty();
+		empphoneinfoTd.append(employee.phone);
+		empemailinfoTd.empty();
+		empemailinfoTd.append(employee.email);
+	}
+	
+	</script>
 </body>
 </html>

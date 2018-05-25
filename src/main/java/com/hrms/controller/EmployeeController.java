@@ -2,6 +2,7 @@ package com.hrms.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,7 @@ import com.hrms.service.EmployeeService;
 public class EmployeeController {
 	@Autowired
 	EmployeeService employeeService;
+	
 	/*
 	 * 导入jackson
 	 * @param pn 
@@ -47,6 +49,7 @@ public class EmployeeController {
 	@RequestMapping("/saveEmp")
 	@ResponseBody
 	public Msg saveEmp(Employee emp) {
+		System.out.println("---save emp---");
 		employeeService.saveEmp(emp);
 		return Msg.success();	
 	}
@@ -58,13 +61,27 @@ public class EmployeeController {
 		return Msg.success().add("emp", emp);	
 	}
 
+	@RequestMapping(value="/getEmpById")
+	@ResponseBody
+	public Msg getEmpById(String id) {
+		Employee emp = employeeService.getEmpById(id);
+		return Msg.success().add("emp", emp);	
+	}
+	
+	@RequestMapping(value="/getEmpByEmpNO")
+	@ResponseBody
+	public Msg getEmpByEmpNO(String empNO) {
+		System.out.println("in controller empNO="+empNO);
+		Employee emp = employeeService.getEmpByEmpNO(empNO);
+		return Msg.success().add("emp", emp);	
+	}
+	
 	@RequestMapping(value="/deleteEmp/{id}", method=RequestMethod.DELETE)
 	@ResponseBody
 	public Msg deleteEmp(@PathVariable(value="id") String id) {
 		System.out.println("id="+id+", delete operation");
 		employeeService.deleteEmpById(Integer.parseInt(id));
 		return Msg.success();
-		
 	}
 	
 	@RequestMapping(value="/updateEmp/{id}", method=RequestMethod.PUT)
@@ -75,6 +92,17 @@ public class EmployeeController {
 		employeeService.updateEmp(emp);
 		return Msg.success();
 	}
+	/*调整员工岗位*/
+	@RequestMapping(value="/changeEmpJob/{id}", method=RequestMethod.PUT)
+	@ResponseBody
+	public Msg changeEmpJob(@PathVariable(value="id") String id,Employee emp) {
+		System.out.println("in change job controller");
+		System.out.println("id="+id+",jobid="+emp.getJobid());
+		employeeService.changeEmpJob(Integer.parseInt(id),emp.getJobid());
+		return Msg.success();
+	}
+	
+	
 	
 	// @RequestMapping("/emps")
 	public String getEmps(@RequestParam(value = "pn", defaultValue = "1") Integer pn, Model model) {
@@ -86,5 +114,26 @@ public class EmployeeController {
 		PageInfo page = new PageInfo(emps, 5);// 表格下面，连续显示的页码数为5
 		model.addAttribute("pageInfo", page);
 		return "list";
+	}
+	
+	@RequestMapping  (value="/getEmpdataByGender")
+	@ResponseBody
+	public HashMap<String,Integer> getEmpdataByGender(){
+		System.out.println("in employeeController getEmpdataByGender");
+		List<Employee> employees = employeeService.getALL();
+		Integer manSum=0;
+		Integer womanSum=0;
+		for(Employee employee:employees) {
+			if(employee.getGender().equals("m")) {
+				manSum++;
+			}else if(employee.getGender().equals("f")){
+				womanSum++;
+			}
+		}
+		HashMap<String,Integer> empGenderData = new HashMap<String,Integer>();
+		empGenderData.put("m",manSum);
+		empGenderData.put("f",womanSum);
+		return empGenderData;
+		
 	}
 }

@@ -55,4 +55,5 @@ public class DepartmentService {
 	public boolean validateDeptment(String deptName) {
 		return !getDeptByName(deptName).isEmpty();// 存在就返回true,否则false
 	}
+	
 }

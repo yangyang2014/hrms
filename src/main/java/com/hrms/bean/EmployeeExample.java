@@ -173,7 +173,10 @@ public class EmployeeExample {
             addCriterion("emp_name is not null");
             return (Criteria) this;
         }
-
+        public Criteria andEmpNOEqualTo(String value) {
+            addCriterion("empno =", value, "empno");
+            return (Criteria) this;
+        }
         public Criteria andEmpNameEqualTo(String value) {
             addCriterion("emp_name =", value, "empName");
             return (Criteria) this;
@@ -433,6 +436,12 @@ public class EmployeeExample {
             addCriterion("d_id not between", value1, value2, "dId");
             return (Criteria) this;
         }
+        
+        public Criteria andJobIdEqualTo(Integer value) {
+            addCriterion("jobid =", value, "jobid");
+            return (Criteria) this;
+        }
+
     }
 
     public static class Criteria extends GeneratedCriteria {

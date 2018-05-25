@@ -163,7 +163,12 @@ public class DepartmentExample {
             addCriterion("ID not between", value1, value2, "id");
             return (Criteria) this;
         }
-
+        
+        public Criteria andNumberEqualTo(String value) {
+            addCriterion("DeptmentNO =", value, "number");
+            return (Criteria) this;
+        }
+        
         public Criteria andNameIsNull() {
             addCriterion("NAME is null");
             return (Criteria) this;

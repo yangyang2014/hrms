@@ -2,15 +2,15 @@ package com.hrms.bean;
 
 public class Employee {
 	private Integer empId;
-
+	private String empno;
 	private String empName;
-
 	private String gender;
-
 	private String email;
-
+	private String birthTime;
+	private String phone;
 	private Integer dId;
-
+	private Integer jobid;
+	private Job job;
 	private Department department;
 
 	public Employee() {
@@ -44,6 +44,14 @@ public class Employee {
 		this.empId = empId;
 	}
 
+	public String getEmpno() {
+		return empno;
+	}
+
+	public void setEmpno(String empno) {
+		this.empno = empno;
+	}
+
 	public String getEmpName() {
 		return empName;
 	}
@@ -68,6 +76,22 @@ public class Employee {
 		this.email = email == null ? null : email.trim();
 	}
 
+	public String getBirthTime() {
+		return birthTime;
+	}
+
+	public void setBirthTime(String birthTime) {
+		this.birthTime = birthTime;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	public Integer getdId() {
 		return dId;
 	}
@@ -82,5 +106,21 @@ public class Employee {
 
 	public void setDepartment(Department department) {
 		this.department = department;
+	}
+
+	public Integer getJobid() {
+		return jobid;
+	}
+
+	public void setJobid(Integer jobid) {
+		this.jobid = jobid;
+	}
+
+	public Job getJob() {
+		return job;
+	}
+
+	public void setJob(Job job) {
+		this.job = job;
 	}
 }

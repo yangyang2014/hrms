@@ -51,6 +51,11 @@ public class commonUtil {
 		return JobNO;
 
 	}
+	/*生成员工编号*/
+	public static String generateEmpNO(String empname) {
+		String empNO = Chinese2Alph.String2Alpha(empname)+new Random().nextInt(1000);
+		return empNO;
+	}
 
 	public static Integer[] analyze(String jobsId) {
 		String[] IdsString =jobsId.split("_");

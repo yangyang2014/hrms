@@ -35,6 +35,7 @@ public class LoginController {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user);
 			session.setAttribute("username", user.getUsername());
+			session.setAttribute("userid", user.getId());
 			session.setAttribute("roleName", constant.Role.gerRole(roleId));
 			session.setAttribute("roleId", user.getRoleid());
 			return new ModelAndView("../index");

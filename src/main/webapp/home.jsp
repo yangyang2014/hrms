@@ -25,26 +25,18 @@
 					<li><a href="${APP_PATH}/home.jsp">Home</a></li>
 				</ol>
 				<div class="col-md-5 top-margin-sm">
-					<p>组织信息</p>
-					<div id="deptGraph" style="width: 300px; height: 250px;"></div>
+					<h2>组织信息</h2>
+					<div id="deptGraph" style="width: 400px; height: 300px;"></div>
 				</div>
 				<div class="col-md-5 top-margin-sm">
-					<p>今日考勤</p>
+					<h2>公司人员</h2>
+					<div id="empGenderGraph" style="width: 400px; height: 300px;"></div>
 				</div>
 				<div class="col-md-2 top-margin-sm">
-					<p>温馨提示</p>
+					<h2>温馨提示</h2>
+					<p>2018年5月27日</p>
+					<p>暂无</p>
 				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-5">
-				<p>题库信息</p>
-			</div>
-			<div class="col-md-5">
-				<p>公司人员</p>
-			</div>
-			<div class="col-md-2">
-				<p>待办列表</p>
 			</div>
 		</div>
 	</div>
@@ -56,6 +48,7 @@
 	<script>
 		$(function() {
 			getDeptData();
+			getEmpData();
 		});
 
 		function getDeptData() {
@@ -67,6 +60,17 @@
 				}
 			});
 		}
+
+		function getEmpData() {
+			$.ajax({
+				url:"${APP_PATH}/getEmpdataByGender",
+				type:"GET",
+				success: function(empData){
+					console.log(empData);
+					 buildEmpGraph(empData);
+				}
+			});
+		};
 	</script>
 </body>
 </html>

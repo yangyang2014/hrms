@@ -29,4 +29,5 @@ public interface DepartmentMapper {
     int updateByPrimaryKey(Department record);
 
     List<Department> getDeptByName(String deptName);
+    
 }
