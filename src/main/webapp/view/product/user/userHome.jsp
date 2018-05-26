@@ -65,6 +65,7 @@
 					<td class="col-sm-2 " id="empphone-info"></td>
 					<td class="col-sm-2 " id="empemail-info"></td>
 				</tr>
+				<tr><td><button>修改</button></td></tr>
 			</table>
 		</div>
 	</div>
