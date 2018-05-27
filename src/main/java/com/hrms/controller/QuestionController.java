@@ -18,12 +18,15 @@ import com.hrms.bean.Msg;
 import com.hrms.bean.Question;
 import com.hrms.bean.QuestionExample;
 import com.hrms.dao.QuestionMapper;
+import com.hrms.service.LogService;
 import com.hrms.service.QuestionMapperService;
 
 @Controller
 public class QuestionController {
 	@Autowired
 	QuestionMapperService questionMapperService;
+	@Autowired
+	LogService logService;
 
 	@RequestMapping(value = "/getProgress/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Msg> getProgress(@PathVariable Integer id) {

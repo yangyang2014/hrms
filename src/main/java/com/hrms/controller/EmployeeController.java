@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,12 +27,15 @@ import com.hrms.bean.Employee;
 import com.hrms.bean.EmployeeExample;
 import com.hrms.bean.Msg;
 import com.hrms.service.EmployeeService;
+import com.hrms.service.LogService;
+import com.hrms.util.constant;
 
 @Controller
 public class EmployeeController {
 	@Autowired
 	EmployeeService employeeService;
-	
+	@Autowired
+	LogService logService;
 	/*
 	 * 导入jackson
 	 * @param pn 
@@ -51,6 +56,7 @@ public class EmployeeController {
 	public Msg saveEmp(Employee emp) {
 		System.out.println("---save emp---");
 		employeeService.saveEmp(emp);
+		logService.addSystemLog(constant.username, "新增"+emp.getEmpName()+"员工");
 		return Msg.success();	
 	}
 
@@ -81,6 +87,7 @@ public class EmployeeController {
 	public Msg deleteEmp(@PathVariable(value="id") String id) {
 		System.out.println("id="+id+", delete operation");
 		employeeService.deleteEmpById(Integer.parseInt(id));
+		logService.addSystemLog(constant.username, "删除一个员工");
 		return Msg.success();
 	}
 	
@@ -90,6 +97,7 @@ public class EmployeeController {
 		System.out.println("id="+id+",emp="+emp.getEmpName());
 		emp.setEmpId(Integer.parseInt(id));
 		employeeService.updateEmp(emp);
+		logService.addSystemLog(constant.username, "修改"+emp.getEmpName()+"员工信息");
 		return Msg.success();
 	}
 	/*调整员工岗位*/
@@ -99,10 +107,22 @@ public class EmployeeController {
 		System.out.println("in change job controller");
 		System.out.println("id="+id+",jobid="+emp.getJobid());
 		employeeService.changeEmpJob(Integer.parseInt(id),emp.getJobid());
+		logService.addSystemLog(constant.username, "调整"+emp.getEmpName()+"员工岗位");
 		return Msg.success();
 	}
 	
-	
+	/*调整员工岗位*/
+	@RequestMapping(value="/updateEmpContact")
+	@ResponseBody  
+	public  ResponseEntity updateEmpContact(String empId,String email) {
+		System.out.println("empid:"+empId+":phone:"+email);
+		Employee emp = new Employee();
+		emp.setEmpId(Integer.parseInt(empId));
+		emp.setEmail(email);
+		employeeService.updateContact(emp);
+		logService.addSystemLog(constant.username, "修改员工联系方式");
+		return new ResponseEntity(HttpStatus.OK);
+	}
 	
 	// @RequestMapping("/emps")
 	public String getEmps(@RequestParam(value = "pn", defaultValue = "1") Integer pn, Model model) {

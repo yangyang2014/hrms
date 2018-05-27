@@ -13,13 +13,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.hrms.bean.user;
+import com.hrms.service.LogService;
 import com.hrms.service.UserService;
 import com.hrms.util.commonUtil;
+import com.hrms.util.constant;
 
 @Controller
 public class UserController {
 	@Autowired
 	UserService userService;
+	@Autowired
+	LogService logService;
 
 	@RequestMapping(value = "getAllUsers")
 	public ResponseEntity<List<user>> getAllUsers() {
@@ -30,6 +34,7 @@ public class UserController {
 	@RequestMapping(value = "addUser")
 	public ResponseEntity<String> addUser(user user) {
 		userService.addUser(user);
+		logService.addSystemLog(constant.username, "添加了"+constant.Role.gerRole(Integer.parseInt(user.getRoleid()))+":"+user.getUsername());
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 
@@ -45,6 +50,7 @@ public class UserController {
 		user user = (user) session.getAttribute("user");
 	//	System.out.println("password="+password+" username="+username);
 		userService.changePassword(user,password);
+		logService.addSystemLog(constant.username, "修改了密码");
 		return new ResponseEntity<String>("success",HttpStatus.OK);
 	}
 	
@@ -52,6 +58,7 @@ public class UserController {
 	public ResponseEntity<String> resetPassword(user user){
 //		System.out.println("username="+user.getUsername());
 		userService.changePassword(user,"123456");
+		logService.addSystemLog(constant.username, "重置"+user.getUsername()+"密码");
 		return  new ResponseEntity<String>("success",HttpStatus.OK);
 	}
 	
@@ -59,6 +66,7 @@ public class UserController {
 	public ResponseEntity<String> deleteUser(user user){
 //		System.out.println("username="+user.getUsername());
 		userService.deleteUser(user);
+		logService.addSystemLog(constant.username, "删除了一个用户");
 		return  new ResponseEntity<String>("success",HttpStatus.OK);
 	}
 	

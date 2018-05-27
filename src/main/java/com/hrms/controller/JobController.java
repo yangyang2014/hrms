@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hrms.bean.Job;
 import com.hrms.service.JobService;
+import com.hrms.service.LogService;
 import com.hrms.util.commonUtil;
+import com.hrms.util.constant;
 
 @Controller
 public class JobController {
-
 	@Autowired
 	JobService jobService;
+	@Autowired
+	LogService logService;
 
 	@RequestMapping("/addJob")
 	@ResponseBody
@@ -33,6 +36,7 @@ public class JobController {
 			return new ResponseEntity<Integer>(0, HttpStatus.OK);
 		}
 		Integer result = jobService.addJob(job);
+		logService.addSystemLog(constant.username, "添加了"+job.getJobname()+"岗位信息");
 		return new ResponseEntity<Integer>(result, HttpStatus.OK);
 
 	}
@@ -77,6 +81,7 @@ public class JobController {
 	public ResponseEntity<Integer> deleteJobs(@RequestParam(value = "jobs") String jobs) {
 		System.out.println("jobs="+jobs);
 		Integer result = jobService.delete(jobs);
+		logService.addSystemLog(constant.username, "删除一个岗位信息");
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}
 

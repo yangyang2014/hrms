@@ -66,4 +66,14 @@ public class commonUtil {
 		System.out.println(IdsInt.toString());
 		return IdsInt;
 	}
+	
+	public static String getCurrentTime() {
+		Date day = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return df.format(day);
+	}
+	
+	public static void main(String[] args) {
+		
+	}
 }

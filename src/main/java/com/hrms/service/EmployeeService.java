@@ -74,6 +74,12 @@ public class EmployeeService {
 		empExample.or().andEmpNOEqualTo(empNO);
 		return employMapper.selectByExampleWithDept(empExample).get(0);
 		 
+	}
+	public void updateContact(Employee emp) {
+		Employee employee = employMapper.selectByPrimaryKey(emp.getEmpId());
+		employee.setEmail(emp.getEmail());
+		employee.setPhone(emp.getPhone());	
+		employMapper.updateByPrimaryKey(employee);
 	}	
 }
       

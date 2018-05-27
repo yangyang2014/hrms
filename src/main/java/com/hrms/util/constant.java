@@ -1,7 +1,7 @@
 package com.hrms.util;
 
 public class constant {
-	
+	public static String username = "";//系统当前登录的用户
 	public enum Role{
 		Sys_Admin(1,"系统管理员"),Admin(2,"人事管理员"),User(3,"普通用户");
 		private int index;

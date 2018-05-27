@@ -83,7 +83,7 @@
 				<thead>
 					<tr>
 
-						<th><button disabled>系统日志</button></th>
+						<th><button id="getLogs">系统日志</button></th>
 						<th><button id="selectAll">所有用户</button></th>
 						<th></th>
 						<th></th>
@@ -192,6 +192,35 @@
 		$("#selectAll").click(function() {
 			getAllUser();
 		});
+		/*获取所有系统日志*/
+		$("#getLogs").click(function(){
+			getLogs();
+		});
+		function getLogs(){
+			$.ajax({
+				url : "${APP_PATH}/getLogs",
+				
+				success : function(logs) {
+					buildLogView(logs);
+					
+				}
+			});
+		}
+		function buildLogView(logs){
+			$("tbody").empty();
+			var tr = $("<tr></tr>");
+			$("<td></td>").append("时间").appendTo(tr);
+			$("<td></td>").append("用户").appendTo(tr);
+			$("<td></td>").append("操作").appendTo(tr);
+			$("tbody").append(tr);
+			$.each(logs,function(index,log){
+				var logTr = $("<tr></tr>");
+				$("<td></td>").append(log.time).appendTo(logTr);
+				$("<td></td>").append(log.username).appendTo(logTr);
+				$("<td></td>").append(log.operation).appendTo(logTr);
+				$("tbody").append(logTr);
+			});
+		}
 	</script>
 </body>
 </html>
