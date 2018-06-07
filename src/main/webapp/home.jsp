@@ -34,7 +34,7 @@
 				</div>
 				<div class="col-md-2 top-margin-sm">
 					<h2>温馨提示</h2>
-					<p>2018年5月27日</p>
+					<p>2018年6月6日</p>
 					<p>暂无</p>
 				</div>
 			</div>
