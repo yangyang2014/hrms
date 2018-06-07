@@ -44,7 +44,7 @@
 					</div>
 
 					<button type="submit" id="searchByUserName"
-						class="btn btn-sm btn-primary">搜索</button>
+						class="btn btn-sm btn-primary" disabled>搜索</button>
 				</form>
 			</div>
 			<div class="col-md-6"></div>
@@ -55,19 +55,19 @@
 				<form class="form-inline" id="addUserForm">
 					<div class="form-group">
 						<label for="role">角色</label> <select class="form-control"
-							id="role" name="roleid">
+							id="roleid" name="roleid">
 							<option value="1">系统管理员</option>
 							<option value="2">人事管理员</option>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="jobname">用户名</label> <input type="text"
-							class="form-control" id="jobname" name="jobname"
+							class="form-control" id="username" name="username"
 							placeholder="必须由英文、数字和下划线组成">
 					</div>
 
 					<div class="form-group">
-						<button type="button" class="btn btn-info" id="saveJob">保存</button>
+						<button type="button" class="btn btn-info" id="saveUser">保存</button>
 						<button type="button" class="btn" data-toggle="collapse"
 							data-target="#addUserDiv">取消</button>
 					</div>
@@ -83,8 +83,8 @@
 				<thead>
 					<tr>
 
-						<th><button>查看系统日志</button></th>
-						<th><button>查看所有用户</button></th>
+						<th><button id="getLogs">系统日志</button></th>
+						<th><button id="selectAll">所有用户</button></th>
 						<th></th>
 						<th></th>
 						<th><div style="width: 20px; height: 20px; background: red;"></div>系统管理员</th>
@@ -112,6 +112,7 @@
 		}
 		/* 渲染到页面 */
 		function buildUserView(users) {
+			$("tbody").empty()
 			var userTr = $("<tr></tr>");
 			$.each(users, function(index, user) {
 				var userTd = $("<td></td>")
@@ -125,7 +126,17 @@
 				}
 				var resetButton = $("<button></button>").append("密码重置");
 				var deleteButton = $("<button></button>").append("删除用户");
-				var buttonDiv =$("<div></div>").append(resetButton).append(deleteButton).css("display","block");
+				resetButton.click(function() {
+					resetPassword(user);
+				});
+				deleteButton.click(function() {
+					deleteUser(user);
+				})
+				var buttonDiv = $("<div></div>").append(resetButton).append(
+						deleteButton).css("display", "none");
+				userDiv.bind("click", function() {
+					buttonDiv.css("display", "block");
+				});
 				userTd.append(userDiv).append(buttonDiv);
 				userTr.append(userTd);
 				var pos = index + 1;
@@ -136,6 +147,79 @@
 
 			});
 			$("tbody").append(userTr);
+		}
+
+		/*  重置密码  */
+		function resetPassword(user) {
+			$.ajax({
+				url : "${APP_PATH}/resetPassword",
+				data : user,
+				success : function(result) {
+					alert("密码重置成功");
+					getAllUser();
+					console.log(result);
+				}
+
+			});
+		}
+		/* 删除用户  */
+		function deleteUser(user) {
+			$.ajax({
+				url : "${APP_PATH}/deleteUser",
+				data : user,
+				success : function(result) {
+					alert("用户删除成功");
+					getAllUser();
+				}
+			});
+		}
+		/* 保存新增的用户 */
+		$("#saveUser").click(function() {
+			var user = {};
+			user.username = $("#username").val();
+			user.roleid = $("#roleid").val();
+			console.log(user);
+			$.ajax({
+				url : "${APP_PATH}/addUser",
+				data : user,
+				success : function(result) {
+					alert("添加用户成功");
+					getAllUser();
+				}
+			});
+		});
+		/* 获取所有用户  */
+		$("#selectAll").click(function() {
+			getAllUser();
+		});
+		/*获取所有系统日志*/
+		$("#getLogs").click(function(){
+			getLogs();
+		});
+		function getLogs(){
+			$.ajax({
+				url : "${APP_PATH}/getLogs",
+				
+				success : function(logs) {
+					buildLogView(logs);
+					
+				}
+			});
+		}
+		function buildLogView(logs){
+			$("tbody").empty();
+			var tr = $("<tr></tr>");
+			$("<td></td>").append("时间").appendTo(tr);
+			$("<td></td>").append("用户").appendTo(tr);
+			$("<td></td>").append("操作").appendTo(tr);
+			$("tbody").append(tr);
+			$.each(logs,function(index,log){
+				var logTr = $("<tr></tr>");
+				$("<td></td>").append(log.time).appendTo(logTr);
+				$("<td></td>").append(log.username).appendTo(logTr);
+				$("<td></td>").append(log.operation).appendTo(logTr);
+				$("tbody").append(logTr);
+			});
 		}
 	</script>
 </body>

@@ -20,14 +20,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hrms.bean.Msg;
 import com.hrms.bean.Recruitment;
 import com.hrms.bean.RecruitmentExample;
+import com.hrms.service.LogService;
 import com.hrms.service.RecruitmentService;
 import com.hrms.util.GenerateDocxUtil;
 import com.hrms.util.commonUtil;
+import com.hrms.util.constant;
 
 @Controller
 public class RecruitController {
 	@Autowired
 	RecruitmentService recruitmentService;
+	@Autowired
+	LogService logService;
 
 	@RequestMapping(value = "/getRecruitmentTask", method = RequestMethod.GET)
 	@ResponseBody
@@ -56,6 +60,7 @@ public class RecruitController {
 		System.out.println(timeDate);
 		Recruitment recruit = new Recruitment(null, name, principal, timeDate, address, destination, employeeinneed);
 		recruitmentService.addRecruitment(recruit);
+		logService.addSystemLog(constant.username, "新增《"+recruit.getName()+"》的招聘简章");
 		return Msg.success().add("recruit", recruit);
 	}
 

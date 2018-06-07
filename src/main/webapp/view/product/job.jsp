@@ -60,7 +60,7 @@
 						</div>
 					</div>
 
-					<button type="submit"id="searchByJobName" class="btn btn-sm btn-primary">搜索</button>
+					<button type="submit"id="searchByJobName" class="btn btn-sm btn-primary" disabled>搜索</button>
 				</form>
 			</div>
 		</div>
@@ -113,8 +113,8 @@
 						<th>岗位</th>
 						<th>所属部门</th>
 						<th>现人数/计划数</th>
-						<th>成员</th>
-						<th>基本薪水</th>
+						<th>职责</th>
+						<!-- <th>基本薪水</th> -->
 
 					</tr>
 				</thead>
@@ -185,14 +185,14 @@
 								.attr("class", "checkbox"));
 				var TdSum = $("<td></td>").append(sum++);
 				var TdJobName = $("<td></td>").append(job.jobname);
-				var TdDeptName = $("<td></td>").append(job.deptno);
+				var TdDeptName = $("<td></td>").append(job.deptName);
 				var TdPersonNum = $("<td></td>").append(
-						"job_person" + "/" + job.jobplannum);
-				var TdPerson = $("<td></td>").append("暂无");
-				var TdSalary = $("<td></td>").append("暂无");
+						 job.currentnum + "/" + job.jobplannum);
+				var TdRemark = $("<td></td>").append(job.jobremark);
+				/* var TdPerson = $("<td></td>").append("暂无");
+				var TdSalary = $("<td></td>").append("暂无"); */
 				Tr.append(TdCheckbox).append(TdSum).append(TdJobName).append(
-						TdDeptName).append(TdPersonNum).append(TdPerson)
-						.append(TdSalary);
+						TdDeptName).append(TdPersonNum).append(TdRemark);
 				Tr.appendTo($("tbody"));
 			});
 		}
@@ -219,7 +219,7 @@
 
 		/*保存新增的岗位信息  */
 		function saveJobs(jobInfo) {
-			alert("save-------");
+			alert("正在保存中。。。");
 			$.ajax({
 				url : "${APP_PATH}/addJob",
 				data : jobInfo,
@@ -228,7 +228,7 @@
 					alert("成功新增一个岗位");
 					getJobInfo();
 					$("#addJobForm input").val("");
-
+					$("textarea").val("");
 				}
 			});
 		}
@@ -261,7 +261,7 @@
 		function getJobByChooseDept() {
 			var deptNO = $("#deptNameSelectToSearch option:selected").val();
 			$.ajax({
-				url : "${APP_PATH}/selectJobByDept",
+				url : "${APP_PATH}/selectJobByDeptNO",
 				type: "post",
 				data : "deptNO=" + deptNO,
 				success : function(jobs) {

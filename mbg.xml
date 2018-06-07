@@ -37,7 +37,7 @@
     </javaClientGenerator>
 
   
- 	<table tableName="user" domainObjectName="user" ></table>
+ 	<table tableName="log" domainObjectName="log" ></table>
  	
 
   </context>

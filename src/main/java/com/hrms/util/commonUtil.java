@@ -51,6 +51,11 @@ public class commonUtil {
 		return JobNO;
 
 	}
+	/*生成员工编号*/
+	public static String generateEmpNO(String empname) {
+		String empNO = Chinese2Alph.String2Alpha(empname)+new Random().nextInt(1000);
+		return empNO;
+	}
 
 	public static Integer[] analyze(String jobsId) {
 		String[] IdsString =jobsId.split("_");
@@ -60,5 +65,15 @@ public class commonUtil {
 		}
 		System.out.println(IdsInt.toString());
 		return IdsInt;
+	}
+	
+	public static String getCurrentTime() {
+		Date day = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return df.format(day);
+	}
+	
+	public static void main(String[] args) {
+		
 	}
 }

@@ -5,6 +5,15 @@
 <HEAD id=Head1>
 <TITLE>顶部</TITLE>
 <META http-equiv=Content-Type content="text/html; charset=utf-8">
+<%
+	pageContext.setAttribute("APP_PATH", request.getContextPath());
+%>
+<link
+	href="${APP_PATH}/static/bootstrap-3.3.7-dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<script src="${APP_PATH}/static/js/jquery-1.12.4.min.js"></script>
+<script
+	src="${APP_PATH}/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <STYLE type=text/css>
 BODY {
 	PADDING-RIGHT: 0px;
@@ -58,13 +67,12 @@ P {
 								</TR>
 								<TR>
 									<TD></TD>
-									<TD height=35>
-										<span style="font-color:grey;margin-right:10px;"><%=session.getAttribute("roleName") %>:<%=session.getAttribute("username") %>在线</span>
+									<TD height=35><span
+										style="font-color: grey; margin-right: 10px;"><%=session.getAttribute("roleName")%>:<%=session.getAttribute("username")%>在线</span>
 										<A href="../login.jsp" target=_top><FONT color=red><B>退出系统</B></FONT></A>
-										<a href="#">修改密码</a>
-									</TD>
+										<a id="changePassword">修改密码</a> <!-- 按钮触发模态框 --></TD>
 								</TR>
-								
+
 							</TBODY>
 						</TABLE>
 					</TD>
@@ -73,5 +81,49 @@ P {
 			</TBODY>
 		</TABLE>
 	</FORM>
+
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">模态框（Modal）标题</h4>
+				</div>
+				<div class="modal-body">在这里添加一些文本</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary">提交更改</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+
+
+	<script>
+		$("#changePassword").click(function() {
+			var password = prompt("新密码", "");
+			if (password) {
+				alert("正在修改。。。");
+				changePassword(password);
+
+			} else {
+				alert("输入为空。");
+			}
+		});
+		function changePassword(password) {
+			$.ajax({
+				url : "${APP_PATH}/changePassword",
+				data : "password=" + password,
+				success : function(result) {
+					alert("修改成功");
+				}
+			});
+		}
+	</script>
 </BODY>
 </HTML>

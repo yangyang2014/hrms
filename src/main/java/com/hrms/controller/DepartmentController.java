@@ -16,14 +16,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hrms.bean.Department;
 import com.hrms.bean.Msg;
 import com.hrms.service.DepartmentService;
+import com.hrms.service.LogService;
 import com.hrms.util.Chinese2Alph;
 import com.hrms.util.commonUtil;
+import com.hrms.util.constant;
 
 @Controller
 public class DepartmentController {
 	@Autowired
 	DepartmentService departmentService;
-
+	@Autowired
+	LogService logService;
 	@RequestMapping("/getDeptments")
 	@ResponseBody
 	public Msg getAllDeptment() {
@@ -54,6 +57,7 @@ public class DepartmentController {
 				+ new Random().nextInt(10);
 		department.setNumber(departmentNumber);
 		departmentService.insertDeptmentByExample(department);
+		logService.addSystemLog(constant.username, "添加‘"+department.getName()+"’信息");
 		return Msg.success();
 	}
 
@@ -86,6 +90,7 @@ public class DepartmentController {
 	@ResponseBody
 	public ResponseEntity<Integer> updateDeptment(@PathVariable Integer id, Department department) {
 		Integer result = departmentService.updateDeptment(department);
+		logService.addSystemLog(constant.username, "更新了一个部门信息");
 		HttpStatus status = result != null ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 		return new ResponseEntity<Integer>(result, status);
 	}
@@ -94,6 +99,7 @@ public class DepartmentController {
 	@ResponseBody
 	public Msg deleteDeptment(@PathVariable Integer id) {
 		departmentService.deleteDeptmentById(id);
+		logService.addSystemLog(constant.username, "删除了一个部门信息");
 		return Msg.success();
 	}
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hrms.bean.user;
+import com.hrms.service.LogService;
 import com.hrms.service.UserService;
 import com.hrms.util.constant;
 
@@ -21,6 +22,8 @@ import com.hrms.util.constant;
 public class LoginController {
 	@Autowired
 	UserService userService;
+	@Autowired
+	LogService logService;
 
 	@RequestMapping("/login")
 	@ResponseBody
@@ -33,14 +36,19 @@ public class LoginController {
 			user user = users.get(0);
 			int roleId = Integer.parseInt(user.getRoleid());
 			HttpSession session = request.getSession();
+			session.setAttribute("user", user);
 			session.setAttribute("username", user.getUsername());
+			session.setAttribute("userid", user.getId());
 			session.setAttribute("roleName", constant.Role.gerRole(roleId));
 			session.setAttribute("roleId", user.getRoleid());
+			constant.username=constant.Role.gerRole(roleId)+":"+user.getUsername();
+			logService.addSystemLog(constant.username, "登录系统");
 			return new ModelAndView("../index");
 		} else {
 			request.setAttribute("result", "登录信息有误,请重新输入！");
 			return new ModelAndView("../login");
 		}
 
+		
 	}
 }

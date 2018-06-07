@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hrms.bean.Job;
 import com.hrms.service.JobService;
+import com.hrms.service.LogService;
 import com.hrms.util.commonUtil;
+import com.hrms.util.constant;
 
 @Controller
 public class JobController {
-
 	@Autowired
 	JobService jobService;
+	@Autowired
+	LogService logService;
 
 	@RequestMapping("/addJob")
 	@ResponseBody
@@ -33,18 +36,29 @@ public class JobController {
 			return new ResponseEntity<Integer>(0, HttpStatus.OK);
 		}
 		Integer result = jobService.addJob(job);
+		logService.addSystemLog(constant.username, "添加了"+job.getJobname()+"岗位信息");
 		return new ResponseEntity<Integer>(result, HttpStatus.OK);
 
 	}
 
-	@RequestMapping("/selectJobByDept")
+	@RequestMapping("/selectJobByDeptId")
 	@ResponseBody
-	public ResponseEntity<ArrayList<Job>> selectByDept(String deptNO) {
-		System.out.println("----in selectByDept-----");
-		ArrayList<Job> jobs = jobService.selectByDept(deptNO);
+	public ResponseEntity<ArrayList<Job>> selectByDeptId(String deptId) {
+		System.out.println("----in selectByDeptId-----");
+		ArrayList<Job> jobs = jobService.selectJobByDeptId(deptId);
 		return new ResponseEntity<>(jobs, HttpStatus.OK);
 
 	}
+	
+	@RequestMapping("/selectJobByDeptNO")
+	@ResponseBody
+	public ResponseEntity<ArrayList<Job>> selectJobByDeptNO(String deptNO) {
+		System.out.println("----in selectJobByDeptNO-----");
+		ArrayList<Job> jobs = jobService.selectByDeptNO(deptNO);
+		return new ResponseEntity<>(jobs, HttpStatus.OK);
+
+	}	
+	
 
 	@RequestMapping("/selectAllJob")
 	@ResponseBody
@@ -67,6 +81,7 @@ public class JobController {
 	public ResponseEntity<Integer> deleteJobs(@RequestParam(value = "jobs") String jobs) {
 		System.out.println("jobs="+jobs);
 		Integer result = jobService.delete(jobs);
+		logService.addSystemLog(constant.username, "删除一个岗位信息");
 		return new ResponseEntity<Integer>(result,HttpStatus.OK);
 	}
 

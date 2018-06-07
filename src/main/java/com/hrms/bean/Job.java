@@ -2,19 +2,13 @@ package com.hrms.bean;
 
 public class Job {
     private int jobid;
-
     private String jobno;
-    
     private String jobname;
-    
     private String deptno;
-
     private String jobremark;
-
     private int jobplannum;
-
-   
-
+    private int currentnum;//岗位现有人数
+    private String deptName;
     public int getJobid() {
         return jobid;
     }
@@ -62,4 +56,20 @@ public class Job {
     public void setJobname(String jobname) {
         this.jobname = jobname == null ? null : jobname.trim();
     }
+
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
+	public int getCurrentnum() {
+		return currentnum;
+	}
+
+	public void setCurrentnum(int currentnum) {
+		this.currentnum = currentnum;
+	}
 }
